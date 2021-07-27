@@ -28,26 +28,22 @@
 
     function open2() {
       myWindow = newWindow();
-      console.log(111, myWindow);
-      console.log(222, myWindow.location);
       submit();
     }
 
     function submit() {
       console.log('submit');
-      console.log(333, myWindow);
-      const href = myWindow.location.href;
       setTimeout(() => {
         console.log('setWindow10');
-        setWindow('', 'setWindow10 === ' + href);
+        setWindow('', 'setWindow10 === ');
       }, 1000);
       setTimeout(() => {
         console.log('setWindow50');
-        setWindow('', 'setWindow50 === ' + href);
+        setWindow('', 'setWindow50 === ');
       }, 2000);
       setTimeout(() => {
         console.log('setWindow100');
-        setWindow('', 'setWindow100 === ' + href);
+        setWindow('', 'setWindow100 === ');
         const params = {
           id: 10086,
           name: "test user"
@@ -58,19 +54,17 @@
 
     // 打开新窗口
     function newWindow() {
-      const my = window.open('loading.html',) || window;
-      console.log(444, my);
-      return my;
-      // return window.open('', '_self');
+      return window.open('loading.html', Math.random());
     }
 
     // 设置新窗口内容
     function setWindow(title, body) {
-      console.log(1111, myWindow);
-      console.log(222, myWindow.document);
       try {
+        console.log(1111, myWindow);
         if (!myWindow.document) {
+          console.log(2222);
           myWindow = window;
+          return;
         }
         body = body.replace('localDomain', window.location.origin);
         myWindow.document.body.innerHTML = title + body;
