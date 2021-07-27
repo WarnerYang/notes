@@ -10,8 +10,8 @@
 
 <body>
 
-  <button onclick="open1()">当前窗口</button>
-  <button onclick="open2()">新的窗口</button>
+  <button id="btn1" onclick="open1()">当前窗口</button>
+  <button id="btn2" onclick="open2()">新的窗口</button>
   <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
   <script>
     var vConsole = new window.VConsole();
@@ -26,8 +26,13 @@
     }
 
     function open2() {
+      changeBtnDisable('btn2');
       myWindow = newWindow();
       submit();
+    }
+
+    function changeBtnDisable(id) {
+      document.getElementById(id).disabled = !(document.getElementById(id).disabled);
     }
 
     function submit() {
@@ -81,7 +86,8 @@
     // from表单数据 - 直接把要请求第三方的数据塞到新窗口里面
     function fromWindow(url, params, method = "post") {
       console.log(99999);
-      //return;
+      changeBtnDisable('btn2');
+      return;
       const form = myWindow.document.createElement("form");
       form.method = method;
       form.action = url;
