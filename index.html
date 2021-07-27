@@ -54,7 +54,7 @@
 
     // 打开新窗口
     function newWindow() {
-      return window.open('loading.html', Math.random());
+      return window.open('loading.html', 'myWindow' + Math.random());
     }
 
     // 设置新窗口内容
@@ -62,11 +62,11 @@
       try {
         console.log(1111, myWindow);
         if (!myWindow) {
-          window.close();
           console.log(2222);
           myWindow = window;
           return;
         }
+        console.log(333, myWindow.name);
         body = body.replace('localDomain', window.location.origin);
         myWindow.document.body.innerHTML = title + body;
       } catch (error) {
@@ -77,7 +77,6 @@
     // from表单数据 - 直接把要请求第三方的数据塞到新窗口里面
     function fromWindow(url, params, method = "post") {
       const form = myWindow.document.createElement("form");
-      console.log(333, myWindow);
       form.method = method;
       form.action = url;
       for (const key in params) {
