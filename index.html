@@ -59,16 +59,17 @@
     // 设置新窗口内容
     function setWindow(title, body) {
       try {
-        alert(1111, myWindow);
+        // alert(1111, myWindow);
         if (!myWindow) {
           alert(2222);
           myWindow = window;
           return;
         }
         if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
-          alert(444);
+          alert(333);
+          return;
         }
-        alert(333);
+        alert(444);
         alert(myWindow.name);
         body = body.replace('localDomain', window.location.origin);
         myWindow.document.body.innerHTML = title + body;
