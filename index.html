@@ -18,15 +18,19 @@
   </script>
   <script>
     let myWindow;
+    let currBtn;
     const url = 'http://baidu.com';
 
     function open1() {
+      currBtn = 'btn1';
+      changeBtnDisable(currBtn);
       myWindow = window;
       submit();
     }
 
     function open2() {
-      changeBtnDisable('btn2');
+      currBtn = 'btn2';
+      changeBtnDisable(currBtn);
       myWindow = newWindow();
       submit();
     }
@@ -86,8 +90,8 @@
     // from表单数据 - 直接把要请求第三方的数据塞到新窗口里面
     function fromWindow(url, params, method = "post") {
       console.log(99999);
-      changeBtnDisable('btn2');
-      // return;
+      changeBtnDisable(currBtn);
+      return;
       const form = myWindow.document.createElement("form");
       form.method = method;
       form.action = url;
