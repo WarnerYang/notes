@@ -61,7 +61,7 @@
     function setWindow(title, body) {
       try {
         console.log(1111, myWindow);
-        if (!myWindow.document) {
+        if (!myWindow) {
           console.log(2222);
           myWindow = window;
           return;
