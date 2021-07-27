@@ -65,6 +65,9 @@
           myWindow = window;
           return;
         }
+        if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
+          alert(444);
+        }
         alert(333);
         alert(myWindow.name);
         body = body.replace('localDomain', window.location.origin);
