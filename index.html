@@ -12,10 +12,10 @@
 
   <button onclick="open1()">当前窗口</button>
   <button onclick="open2()">新的窗口</button>
-  <!-- <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+  <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
   <script>
     var vConsole = new window.VConsole();
-  </script> -->
+  </script>
   <script>
     let myWindow;
     const url = 'http://baidu.com';
@@ -47,7 +47,7 @@
           id: 10086,
           name: "test user"
         };
-        fromWindow(url, params);
+        // fromWindow(url, params);
       }, 3000);
     }
 
@@ -61,20 +61,20 @@
       try {
         // alert(1111, myWindow);
         if (!myWindow) {
-          alert(2222);
+          console.log(2222);
           myWindow = window;
           return;
         }
         if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
-          alert(333);
+          console.log(333);
           return;
         }
-        alert(444);
-        alert(myWindow.name);
+        console.log(444);
+        console.log(myWindow.name);
         body = body.replace('localDomain', window.location.origin);
         myWindow.document.body.innerHTML = title + body;
       } catch (error) {
-        alert('setWindow err === ', error);
+        console.log('setWindow err === ', error);
       }
     }
 
