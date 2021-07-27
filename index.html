@@ -12,11 +12,10 @@
 
   <button onclick="open1()">当前窗口</button>
   <button onclick="open2()">新的窗口</button>
-  <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+  <!-- <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
   <script>
-    // VConsole 默认会挂载到 `window.VConsole` 上
     var vConsole = new window.VConsole();
-  </script>
+  </script> -->
   <script>
     let myWindow;
     const url = 'http://baidu.com';
@@ -35,15 +34,15 @@
       console.log('submit');
       setTimeout(() => {
         console.log('setWindow10');
-        setWindow('', 'setWindow10 === ');
+        setWindow('', 'setWindow10');
       }, 1000);
       setTimeout(() => {
         console.log('setWindow50');
-        setWindow('', 'setWindow50 === ');
+        setWindow('', 'setWindow50');
       }, 2000);
       setTimeout(() => {
         console.log('setWindow100');
-        setWindow('', 'setWindow100 === ');
+        setWindow('', 'setWindow100');
         const params = {
           id: 10086,
           name: "test user"
@@ -60,17 +59,18 @@
     // 设置新窗口内容
     function setWindow(title, body) {
       try {
-        console.log(1111, myWindow);
+        alert(1111, myWindow);
         if (!myWindow) {
-          console.log(2222);
+          alert(2222);
           myWindow = window;
           return;
         }
-        console.log(333, myWindow.name);
+        alert(333);
+        alert(myWindow.name);
         body = body.replace('localDomain', window.location.origin);
         myWindow.document.body.innerHTML = title + body;
       } catch (error) {
-        console.log('setWindow err === ', error);
+        alert('setWindow err === ', error);
       }
     }
 
