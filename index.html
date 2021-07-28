@@ -62,6 +62,15 @@
 
     // 打开新窗口
     function newWindow() {
+      const userAgent = window.navigator.userAgent;
+      console.log(userAgent);
+      const specialBrowsers = ['Wechat', 'webdebugger'];
+      for (const browser of specialBrowsers) {
+        if (userAgent.indexOf(browser) !== -1) {
+          console.log(111);
+          return window;
+        }
+      }
       return window.open('loading.html', 'myWindow' + Math.random());
     }
 
