@@ -22,11 +22,11 @@
     if (!window.name) {
         console.log(777);
         window.history.back();
+        setInterval(() => {
+            console.log(888);
+            window.history.back();
+        }, 500);
     }
-    setInterval(() => {
-        console.log(888);
-        window.history.back();
-    }, 500);
 </script>
 
 </html>
