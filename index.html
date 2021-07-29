@@ -9,12 +9,15 @@
 </head>
 
 <body>
-
   <button id="btn1" onclick="open1()">当前窗口</button>
   <button id="btn2" onclick="open2()">新的窗口</button>
+  <p id="userAgent"></p>
+
   <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
   <script>
     var vConsole = new window.VConsole();
+    const userAgent = window.navigator.userAgent;
+    window.document.getElementById("userAgent").innerHTML = userAgent;
   </script>
   <script>
     let myWindow;
@@ -64,6 +67,7 @@
     function newWindow() {
       const userAgent = window.navigator.userAgent;
       console.log(userAgent);
+      // 这些浏览器就在当前窗口跳转
       const specialBrowsers = ['Wechat', 'webdebugger'];
       for (const browser of specialBrowsers) {
         if (userAgent.indexOf(browser) !== -1) {
