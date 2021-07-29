@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>loading</title>
+</head>
+
+<body>
+    loading...
+</body>
+
+<script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+<script>
+    var vConsole = new window.VConsole();
+</script>
+
+<script>
+    console.log(666, window.name);
+    if (!window.name) {
+        console.log(777);
+        window.history.back();
+        setInterval(() => {
+            console.log(888);
+            window.history.back();
+        }, 500);
+    }
+</script>
+
+</html>
