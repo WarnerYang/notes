@@ -3,142 +3,86 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>杨华强的个人主页</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="description" content="杨华强的个人主页">
+  <meta name="keywords" content="杨华强,杨华强的个人主页,华强博客,Warner,WarnerYang">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
 </head>
+<style>
+  #cover-page-hitokoto {
+    font-weight: 500;
+  }
+</style>
 
 <body>
-  <button id="btn1" onclick="open1()">当前窗口</button>
-  <button id="btn2" onclick="open2()">新的窗口</button>
-  <p id="userAgent"></p>
-
-  <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+  <div id="app"></div>
   <script>
-    var vConsole = new window.VConsole();
-    const userAgent = window.navigator.userAgent;
-    window.document.getElementById("userAgent").innerHTML = userAgent;
-  </script>
-  <script>
-    let myWindow;
-    let currBtn;
-    const url = 'https://baidu.com';
+    window.$docsify = {
+      repo: 'WarnerYang/notes',
+      // loadNavbar: true,
+      loadSidebar: true,
+      coverpage: true,
+      subMaxLevel: 2,
+      auto2top: true,
+      // themeColor: '#007fff',
+      count: {
+        countable: true,
+        language: 'chinese'
+      },
+      search: 'auto',
+      plugins: [
+        function (hook) {
+          var footer = [
+            '<hr/>',
+            '<footer>',
+            '<span>&copy;' + new Date().getFullYear() +
+            '<a href="https://github.com/WarnerYang" target="_blank"> Warner </a></span>',
+            '<p id="hitokoto"></p>',
+            '</footer>'
+          ].join('')
 
-    function open1() {
-      currBtn = 'btn1';
-      changeBtnDisable(currBtn);
-      myWindow = window;
-      submit();
+          hook.afterEach(function (html) {
+            return html + footer
+          })
+
+          hook.doneEach(function () {
+            getHitokoto('hitokoto');
+          })
+
+          hook.mounted(function () {
+            getHitokoto('cover-page-hitokoto');
+          })
+        }
+      ]
     }
 
-    function open2() {
-      currBtn = 'btn2';
-      changeBtnDisable(currBtn);
-      myWindow = newWindow();
-      submit();
-    }
-
-    function changeBtnDisable(id) {
-      document.getElementById(id).disabled = !(document.getElementById(id).disabled);
-    }
-
-    function submit() {
-      console.log('submit');
-      setTimeout(() => {
-        console.log('setWindow10');
-        setWindow('', 'setWindow10');
-      }, 1000);
-      setTimeout(() => {
-        console.log('setWindow50');
-        setWindow('', 'setWindow50');
-      }, 2000);
-      setTimeout(() => {
-        console.log('setWindow100');
-        setWindow('', 'setWindow100');
-        const params = {
-          id: 10086,
-          name: "test user"
-        };
-        fromWindow(url, params);
-      }, 3000);
-    }
-
-    // 打开新窗口
-    function newWindow() {
-      if (isSpecialBrowser()) {
-        return window;
-      }
-      return window.open('loading.html', 'myWindow' + Math.random());
-    }
-
-    function isSpecialBrowser() {
-      const userAgent = window.navigator.userAgent;
-      console.log(userAgent);
-      // 这些浏览器就在当前窗口跳转
-      const specialBrowsers = ['Wechat', 'webdebugger', 'Mobile'];
-      for (const browser of specialBrowsers) {
-        if (userAgent.indexOf(browser) !== -1) {
-          return true;
+    function getHitokoto(id) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('get', 'https://v1.hitokoto.cn');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          var data = JSON.parse(xhr.responseText);
+          var hitokoto = document.getElementById(id);
+          hitokoto.innerText = data.hitokoto;
         }
       }
-      return false;
-    }
-
-    function isNotSupportNewWindow() {
-      if (isSpecialBrowser()) {
-        console.log(111);
-        return true;
-      }
-      if (!myWindow) {
-        console.log(222);
-        return true;
-      }
-      if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
-        console.log(333);
-        return true;
-      }
-      return false;
-    }
-
-    // 设置新窗口内容
-    function setWindow(title, body) {
-      try {
-        if (isNotSupportNewWindow()) {
-          return;
-        }
-        console.log(444);
-        body = body.replace('localDomain', window.location.origin);
-        myWindow.document.body.innerHTML = title + body;
-      } catch (error) {
-        console.log('setWindow err === ', error);
-      }
-    }
-
-    // from表单数据 - 直接把要请求第三方的数据塞到新窗口里面
-    function fromWindow(url, params, method = "post") {
-      if (isNotSupportNewWindow()) {
-        myWindow = window;
-      }
-      console.log(99999);
-      changeBtnDisable(currBtn);
-      const form = myWindow.document.createElement("form");
-      form.method = method;
-      form.action = url;
-      for (const key in params) {
-        // eslint-disable-next-line no-prototype-builtins
-        if (params.hasOwnProperty(key)) {
-          const hiddenField = myWindow.document.createElement("input");
-          hiddenField.type = "hidden";
-          hiddenField.name = key;
-          hiddenField.value = params[key];
-          form.appendChild(hiddenField);
-        }
-      }
-      myWindow.document.body.appendChild(form);
-      form.submit();
+      xhr.send();
     }
   </script>
-
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-php.min.js"></script>
+  <script src="//unpkg.com/docsify-count/dist/countable.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
 </body>
 
 </html>
