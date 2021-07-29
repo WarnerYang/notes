@@ -65,34 +65,48 @@
 
     // 打开新窗口
     function newWindow() {
+      if (isSpecialBrowser()) {
+        return window;
+      }
+      return window.open('loading.html', 'myWindow' + Math.random());
+    }
+
+    function isSpecialBrowser() {
       const userAgent = window.navigator.userAgent;
       console.log(userAgent);
       // 这些浏览器就在当前窗口跳转
-      const specialBrowsers = ['Wechat', 'webdebugger'];
+      const specialBrowsers = ['Wechat', 'webdebugger', 'Mobile'];
       for (const browser of specialBrowsers) {
         if (userAgent.indexOf(browser) !== -1) {
-          console.log(111);
-          return window;
+          return true;
         }
       }
-      return window.open('loading.html', 'myWindow' + Math.random());
+      return false;
+    }
+
+    function isNotSupportNewWindow() {
+      if (isSpecialBrowser()) {
+        console.log(111);
+        return true;
+      }
+      if (!myWindow) {
+        console.log(222);
+        return true;
+      }
+      if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
+        console.log(333);
+        return true;
+      }
+      return false;
     }
 
     // 设置新窗口内容
     function setWindow(title, body) {
       try {
-        if (!myWindow) {
-          console.log(2222);
-          myWindow = window;
-          return;
-        }
-        if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
-          console.log(333);
-          myWindow = window;
+        if (isNotSupportNewWindow()) {
           return;
         }
         console.log(444);
-        console.log(myWindow.name);
         body = body.replace('localDomain', window.location.origin);
         myWindow.document.body.innerHTML = title + body;
       } catch (error) {
@@ -102,8 +116,7 @@
 
     // from表单数据 - 直接把要请求第三方的数据塞到新窗口里面
     function fromWindow(url, params, method = "post") {
-      if (!myWindow) {
-        console.log(555);
+      if (isNotSupportNewWindow()) {
         myWindow = window;
       }
       console.log(99999);
