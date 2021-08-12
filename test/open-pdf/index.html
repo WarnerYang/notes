@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn1" onclick="openPdf()">打开PDF</button>
+  <p id="userAgent"></p>
+
+  <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+  <script>
+    var vConsole = new window.VConsole();
+    const userAgent = window.navigator.userAgent;
+    window.document.getElementById("userAgent").innerHTML = userAgent;
+  </script>
+  <script>
+    let myWindow;
+    let currBtn;
+    const url = 'https://atdownloadprd01.blob.core.windows.net/prd-public-clientportal/SEA_50_Credit_Bonus_Promotion_95_EN.pdf';
+
+    function openPdf() {
+      currBtn = 'btn1';
+      changeBtnDisable(currBtn);
+      myWindow = newWindow();
+      if (isNotSupportNewWindow()) {
+        myWindow = window;
+      }
+      myWindow.location = url;
+      changeBtnDisable(currBtn);
+    }
+
+    function changeBtnDisable(id) {
+      document.getElementById(id).disabled = !(document.getElementById(id).disabled);
+    }
+
+    // 打开新窗口
+    function newWindow() {
+      if (isSpecialBrowser()) {
+        return window;
+      }
+      return window.open('loading.html', 'myWindow' + Math.random());
+    }
+
+    function isSpecialBrowser() {
+      const userAgent = window.navigator.userAgent;
+      console.log(userAgent);
+      // 这些浏览器就在当前窗口跳转
+      const specialBrowsers = ['Wechat', 'webdebugger', 'Mobile'];
+      for (const browser of specialBrowsers) {
+        if (userAgent.indexOf(browser) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function isNotSupportNewWindow() {
+      if (isSpecialBrowser()) {
+        console.log(111);
+        return true;
+      }
+      if (!myWindow) {
+        console.log(222);
+        return true;
+      }
+      if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
+        console.log(333);
+        return true;
+      }
+      return false;
+    }
+  </script>
+
+</body>
+
+</html>
