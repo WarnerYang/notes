@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+    <button onclick="openCurrentWindow()">当前窗口</button>
+    <hr>
+    <button onclick="openNewWindow('location')">新的窗口location</button>
+    <button onclick="openNewWindow('htmlData')">新的窗口htmlData</button>
+    <button onclick="openNewWindow('formdata')">新的窗口formdata</button>
+    <hr>
+    <p>测试跳转网址：<a id="jump_link" href="" target="_blank"></a></p>
+    <p>浏览器userAgent：<span id="userAgent"></span></p>
+
+  <script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+  <script>
+    var vConsole = new window.VConsole();
+    const userAgent = window.navigator.userAgent;
+    window.document.getElementById("userAgent").innerHTML = userAgent;
+  </script>
+  <script>
+    let myWindow;
+    const url = 'https://baidu.com';
+    window.document.getElementById("jump_link").href = url;
+    window.document.getElementById("jump_link").innerHTML = url;
+
+    const paymentResData = {
+      reqType: 'location',
+      url: url,
+      htmlData: `<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>测试页面</title> </head> <body> 测试页面 </body> <script> console.log("测试页面");\<\/script> </html>`,
+      formdata: { id: 888888, name: "test name", type: 'formdata' },
+    }
+
+    function openCurrentWindow() {
+      console.log('点击当前窗口');
+      myWindow = window;
+      submit();
+    }
+
+    function openNewWindow(type) {
+      console.log('点击新的窗口' + type);
+      paymentResData.reqType = type
+      myWindow = newWindow();
+      submit();
+    }
+
+    function submit() {
+      console.log('submit');
+      setTimeout(() => {
+        const step = 'setWindow10';
+        console.log(step);
+        setWindow('', step);
+      }, 1000);
+      setTimeout(() => {
+        const step = 'setWindow50';
+        console.log(step);
+        setWindow('', step);
+      }, 2000);
+      setTimeout(() => {
+        const step = 'setWindow100';
+        console.log(step);
+        setWindow('', step);
+        // 请求第三方
+        if (paymentResData.reqType === 'location') {
+          console.log('location');
+          myWindow.location = paymentResData.url; // 后更改页面地址
+        } else if (paymentResData.reqType === 'htmlData') { // api返回一个页面，直接渲染
+          console.log('htmlData');
+          myWindow.document.write(paymentResData.htmlData);
+        } else {
+          console.log('formPost');
+          fromWindow(paymentResData.url, paymentResData.formdata);
+        }
+      }, 3000);
+    }
+
+    // 打开新窗口
+    function newWindow() {
+      if (isSpecialBrowser()) {
+        return window;
+      }
+      return window.open('loading.html', 'myWindow' + Math.random());
+    }
+
+    function isSpecialBrowser() {
+      const userAgent = window.navigator.userAgent;
+      console.log(userAgent);
+      // 这些浏览器就在当前窗口跳转
+      const specialBrowsers = ['Wechat', 'webdebugger', 'Mobile'];
+      for (const browser of specialBrowsers) {
+        if (userAgent.indexOf(browser) !== -1) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function isNotSupportNewWindow() {
+      if (isSpecialBrowser()) {
+        console.log(111);
+        return true;
+      }
+      if (!myWindow) {
+        console.log(222);
+        return true;
+      }
+      if (!myWindow.name || myWindow.name.indexOf('myWindow') === -1) {
+        console.log(333);
+        return true;
+      }
+      return false;
+    }
+
+    // 设置新窗口内容
+    function setWindow(title, body) {
+      try {
+        if (isNotSupportNewWindow()) {
+          return;
+        }
+        console.log(444);
+        body = body.replace('localDomain', window.location.origin);
+        myWindow.document.body.innerHTML = title + body;
+      } catch (error) {
+        console.log('setWindow err === ', error);
+      }
+    }
+
+    // from表单数据 - 直接把要请求第三方的数据塞到新窗口里面
+    function fromWindow(url, params, method = "post") {
+      if (isNotSupportNewWindow()) {
+        myWindow = window;
+      }
+      console.log(99999);
+      const form = myWindow.document.createElement("form");
+      form.method = method;
+      form.action = url;
+      for (const key in params) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (params.hasOwnProperty(key)) {
+          const hiddenField = myWindow.document.createElement("input");
+          hiddenField.type = "hidden";
+          hiddenField.name = key;
+          hiddenField.value = params[key];
+          form.appendChild(hiddenField);
+        }
+      }
+      myWindow.document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
+
+</body>
+
+</html>
