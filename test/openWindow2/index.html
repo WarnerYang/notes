@@ -97,7 +97,7 @@
       }
 
       const newWindow = window.open(myWindowUrl, 'myWindow' + Math.random());
-      console.log('newWindow', newWindow);
+      console.log('newWindow:', newWindow);
       // 检查弹出窗口是否被阻止或成功打开
       if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
         // console.log('弹出窗口被阻止！请允许此站点弹出窗口。');
