@@ -92,7 +92,7 @@
       for (const browser of specialBrowsers) {
         if (userAgent.indexOf(browser) !== -1) {
           console.log('这些浏览器就在当前窗口跳转', specialBrowsers);
-          // return window;
+          return window;
         }
       }
 
